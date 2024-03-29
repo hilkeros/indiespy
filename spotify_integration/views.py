@@ -1,11 +1,19 @@
 # spotify_integration/views.py
 import requests
 from django.conf import settings
+from django.contrib.auth import login
+from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import redirect, render
+
+from .models import SpotifyTracksRequest, UserProfile
 
 
 def start(request):
     return render(request, "start.html")
+
+
+def profile(request):
+    return render(request, "profile.html")
 
 
 def authorize_spotify(request):
@@ -36,9 +44,11 @@ def spotify_redirect(request):
             "client_secret": settings.SPOTIFY_CLIENT_SECRET,
         }
         response = requests.post(token_url, data=data)
-        print(f"hi {response.json()}")
         if response.status_code == 200:
             access_token = response.json()["access_token"]
+            refresh_token = response.json()["refresh_token"]
+            request.session["access_token"] = access_token
+            request.session["refresh_token"] = refresh_token
             # Use access token to fetch recently played tracks
             recently_played_url = (
                 "https://api.spotify.com/v1/me/player/recently-played?limit=50"
@@ -47,12 +57,31 @@ def spotify_redirect(request):
             response = requests.get(recently_played_url, headers=headers)
             if response.status_code == 200:
                 tracks_data = response.json()["items"]
+                request.session["tracks_data"] = tracks_data
                 print(f"hi {tracks_data}")
-                # for track_data in tracks_data:
-                #     # Save recently played tracks to the database
-                #     Track.objects.create(
-                #         name=track_data['track']['name'],
-                #         artist=track_data['track']['artists'][0]['name'],
-                #         # Add more fields as needed
-                #     )
-    return render(request, "redirect.html", {"tracks_data": tracks_data})
+
+    # If user submits registration form
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            # Create user profile and save access token
+            profile = UserProfile.objects.create(
+                user=user, access_token=request.session.get("access_token")
+            )
+            # Save tracks associated with the newly created user
+            tracks_data = request.session.get("tracks_data")
+            if tracks_data:
+                SpotifyTracksRequest.objects.create(
+                    user=user,
+                    tracks_data=tracks_data,
+                    access_token=request.session.get("access_token"),
+                )
+            login(request, user)
+            return redirect(
+                "profile_page"
+            )  # Redirect to track list page after registration
+    else:
+        form = UserCreationForm()
+
+    return render(request, "redirect.html", {"form": form, "tracks_data": tracks_data})

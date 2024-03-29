@@ -18,11 +18,17 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from spotify_integration.views import authorize_spotify, spotify_redirect, start
+from spotify_integration.views import (
+    authorize_spotify,
+    profile,
+    spotify_redirect,
+    start,
+)
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", start, name="start_page"),
     path("authorize_spotify/", authorize_spotify, name="authorize_spotify"),
     path("spotify-redirect/", spotify_redirect, name="spotify_redirect"),
+    path("profile/", profile, name="profile_page"),
 ]
