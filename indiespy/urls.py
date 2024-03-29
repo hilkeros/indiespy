@@ -14,9 +14,15 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.contrib import admin
 from django.urls import path
 
+from spotify_integration.views import authorize_spotify, spotify_redirect, start
+
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path("admin/", admin.site.urls),
+    path("", start, name="start_page"),
+    path("authorize_spotify/", authorize_spotify, name="authorize_spotify"),
+    path("spotify-redirect/", spotify_redirect, name="spotify_redirect"),
 ]

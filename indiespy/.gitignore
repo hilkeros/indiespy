@@ -1,0 +1,26 @@
+# Django related
+*.pyc
+*.pyo
+__pycache__/
+*.sqlite3
+
+# Environment variables
+.env
+
+# Static files (usually collected into a separate directory)
+/staticfiles/
+
+# Logs
+*.log
+
+# Temporary files
+*.swp
+
+# IDE specific files
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# System files
+.DS_Store
