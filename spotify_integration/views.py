@@ -2,10 +2,11 @@
 import requests
 from django.conf import settings
 from django.contrib.auth import login
-from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import redirect, render
 
-from .models import SpotifyTracksRequest, UserProfile
+from users.forms import CustomUserCreationForm
+
+from .models import SpotifyTracksRequest, SpotifyUser
 
 
 def start(request):
@@ -62,12 +63,14 @@ def spotify_redirect(request):
 
     # If user submits registration form
     if request.method == "POST":
-        form = UserCreationForm(request.POST)
+        form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            # Create user profile and save access token
-            profile = UserProfile.objects.create(
-                user=user, access_token=request.session.get("access_token")
+            # Create SpotifyUser and save access token
+            SpotifyUser.objects.create(
+                user=user,
+                access_token=request.session.get("access_token"),
+                refresh_token=request.session.get("refresh_token"),
             )
             # Save tracks associated with the newly created user
             tracks_data = request.session.get("tracks_data")
@@ -82,6 +85,6 @@ def spotify_redirect(request):
                 "profile_page"
             )  # Redirect to track list page after registration
     else:
-        form = UserCreationForm()
+        form = CustomUserCreationForm()
 
     return render(request, "redirect.html", {"form": form, "tracks_data": tracks_data})
