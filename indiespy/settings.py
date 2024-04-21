@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Load environment variables from .env file
 dotenv.read_dotenv()
 
-SECRET_KEY = ""
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 DEBUG = False
 
