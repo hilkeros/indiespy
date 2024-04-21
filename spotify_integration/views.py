@@ -59,7 +59,6 @@ def spotify_redirect(request):
             if response.status_code == 200:
                 tracks_data = response.json()["items"]
                 request.session["tracks_data"] = tracks_data
-                print(f"hi {tracks_data}")
 
     # If user submits registration form
     if request.method == "POST":
