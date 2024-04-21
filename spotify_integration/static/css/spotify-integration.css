@@ -1,0 +1,44 @@
+/* styles.css */
+
+/* Customize form container */
+.user-form-container {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+/* Customize form */
+.user-form {
+    margin-top: 20px;
+}
+
+/* Customize form labels */
+.user-form label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* Customize form inputs */
+.user-form input[type="text"],
+.user-form input[type="email"],
+.user-form input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.user-form li, .helptext {
+    font-size: 0.8em;
+    color: grey;
+}
+
+.user-form ul {
+    margin-bottom: 20px;
+}
+
+/* Customize form error messages */
+.user-form .error-message {
+    color: red;
+}

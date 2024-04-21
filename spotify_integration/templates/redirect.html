@@ -1,22 +1,35 @@
-<!-- redirect_page.html -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Redirect Page</title>
-</head>
-<body>
-    <h1>Register</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Register</button>
-    </form>
-    <h1>You recently listened to</h1>
+{% extends 'base.html' %}
+
+{% block title %}Indiespy - Register{% endblock %}
+
+{% block content %}
+    <h1 class="text-3xl font-bold my-12">Yea, great taste!</h1>
+    <div>
+        <p class="py-3">
+            Looks like we found the music you listened recently. You can see a list below.
+        </p>
+        <p class="py-3">
+            Please create an account and we will continue to analyze your listening data.
+        </p>
+        <p class="py-3">
+            Soon we will come with some ideas on how to properly pay artists depending on your listening behavior.
+        </p>
+    </div>
+    <div class="user-form-container">
+        <form method="post"  class="user-form">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold mt-4 py-2 px-4 rounded-full">Register</button>
+        </form>
+    </div>
+    
+    <h1 class="text-2xl font-bold mt-12">You recently listened to</h1>
     <ul>
     {% for item in tracks_data %}
-        <li>{{ item.track.name }} - {{ item.track.artists.0.name }} - {{ item.played_at}} </li>
+        <li>{{ item.track.name }} - {{ item.track.artists.0.name }} </li>
     {% endfor %}
-    </ul>
+</ul>
+{% endblock %}
+   
 </body>
 </html>

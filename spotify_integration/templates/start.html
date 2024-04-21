@@ -1,13 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Indiespy</title>
-</head>
-<body>
-    <h1>Welcome to Indiespy</h1>
+{% extends 'base.html' %}
+
+{% block title %}Indiespy{% endblock %}
+
+{% block content %}
+    <h1 class="text-3xl font-bold my-12">Welcome to Indiespy</h1>
+    <div>
+        <p class="py-3">
+            Spotify is a very convenient place to listen to music, but its business model doesn't help 
+            you to support indie artists financially.
+        </p>
+        <p class="py-3">
+            With Indiespy we want to explore new payment models to turn your Spotify listening history into sustainable careers for your favorite artists.
+        </p>
+        <p class="py-3">
+            First, you need to give us access to your Spotify data.
+        </p>
+    </div>
+
     <form action="{% url 'authorize_spotify' %}" method="get">
-        <button type="submit">Authorize Spotify</button>
+        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold mt-4 py-2 px-4 rounded-full">Authorize Spotify</button>
     </form>
-</body>
-</html>
+{% endblock %}

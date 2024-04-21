@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Your Title Here{% endblock %}</title>
+    <!-- Add any meta tags, CSS links, or other header elements here -->
+    <link rel="stylesheet" href="../static/css/spotify-integration.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <header>
+        <!-- Your header content here -->
+    </header>
+
+    <main role="main">
+        <div class="container mx-auto px-4">
+            {% block content %}
+            <!-- Content goes here -->
+            {% endblock %}
+        </div>
+    </main>
+
+    <footer class="footer mt-auto py-3">
+        <!-- Your footer content here -->
+    </footer>
+</body>
+</html>
