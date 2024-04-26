@@ -25,7 +25,8 @@ dotenv.read_dotenv()
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 
-DEBUG = True
+is_prod = os.environ.get("ENVIRONMENT", default="local") == "prod"
+DEBUG = not is_prod
 
 if DEBUG:
     ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
