@@ -33,7 +33,7 @@ def authorize_spotify(request):
 def spotify_redirect(request):
     # Handle callback after user authorizes with Spotify
     code = request.GET.get("code")
-    tracks_data = []
+    tracks_data = request.session.get("tracks_data", [])
     if code:
         # Exchange code for access token
         token_url = "https://accounts.spotify.com/api/token"
@@ -44,8 +44,9 @@ def spotify_redirect(request):
             "client_id": settings.SPOTIFY_CLIENT_ID,
             "client_secret": settings.SPOTIFY_CLIENT_SECRET,
         }
-        response = requests.post(token_url, data=data)
-        if response.status_code == 200:
+        try:
+            response = requests.post(token_url, data=data)
+            response.raise_for_status()
             access_token = response.json()["access_token"]
             refresh_token = response.json()["refresh_token"]
             request.session["access_token"] = access_token
@@ -56,9 +57,11 @@ def spotify_redirect(request):
             )
             headers = {"Authorization": f"Bearer {access_token}"}
             response = requests.get(recently_played_url, headers=headers)
-            if response.status_code == 200:
-                tracks_data = response.json()["items"]
-                request.session["tracks_data"] = tracks_data
+            response.raise_for_status()
+            tracks_data = response.json()["items"]
+            request.session["tracks_data"] = tracks_data
+        except Exception as e:
+            print(f"Error: {e}")
 
     # If user submits registration form
     if request.method == "POST":
@@ -83,6 +86,8 @@ def spotify_redirect(request):
             return redirect(
                 "profile_page"
             )  # Redirect to track list page after registration
+        else:
+            print("Form errors:", form.errors)
     else:
         form = CustomUserCreationForm()
 

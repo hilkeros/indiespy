@@ -39,6 +39,6 @@
 }
 
 /* Customize form error messages */
-.user-form .error-message {
+ul.errorlist li {
     color: red;
 }
