@@ -32,6 +32,10 @@ if DEBUG:
     ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 else:
     ALLOWED_HOSTS = ["indiespy-affb646fb9ec.herokuapp.com", "indiespy.com"]
+    CSRF_TRUSTED_ORIGINS = [
+        "https://indiespy-affb646fb9ec.herokuapp.com",
+        "https://indiespy.com",
+    ]
 
 
 # Application definition
