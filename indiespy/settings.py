@@ -31,7 +31,7 @@ DEBUG = not is_prod
 if DEBUG:
     ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 else:
-    ALLOWED_HOSTS = ["indiespy-affb646fb9ec.herokuapp.com"]
+    ALLOWED_HOSTS = ["indiespy-affb646fb9ec.herokuapp.com", "indiespy.com"]
 
 
 # Application definition
