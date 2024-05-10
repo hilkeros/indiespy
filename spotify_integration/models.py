@@ -1,3 +1,6 @@
+import ast
+from datetime import datetime
+
 import requests
 from django.conf import settings
 from django.db import models
@@ -48,3 +51,28 @@ class SpotifyTracksRequest(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     access_token = models.CharField(max_length=255)
     tracks_data = models.TextField()
+
+    def create_spotify_plays(self):
+        request_dict = ast.literal_eval(self.tracks_data)
+        for track in request_dict:
+            timestamp_str = track["played_at"]
+            timestamp = datetime.fromisoformat(timestamp_str[:-1])
+            SpotifyPlay.objects.create(
+                user=self.user,
+                played_at=timestamp,
+                track_id=track["track"]["id"],
+                name=track["track"]["name"],
+                artist_id=track["track"]["artists"][0]["id"],
+                artist_name=track["track"]["artists"][0]["name"],
+                popularity=track["track"]["popularity"],
+            )
+
+
+class SpotifyPlay(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    played_at = models.DateTimeField()
+    track_id = models.CharField(max_length=255)
+    name = models.CharField(max_length=255)
+    artist_id = models.CharField(max_length=255)
+    artist_name = models.CharField(max_length=255)
+    popularity = models.IntegerField()
