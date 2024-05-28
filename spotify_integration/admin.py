@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import SpotifyTracksRequest
+from .models import SpotifyPlay, SpotifyTracksRequest
 
 
 class SpotifyTracksRequestAdmin(admin.ModelAdmin):
@@ -10,5 +10,19 @@ class SpotifyTracksRequestAdmin(admin.ModelAdmin):
     ]
 
 
-# Register your model with the admin site
 admin.site.register(SpotifyTracksRequest, SpotifyTracksRequestAdmin)
+
+
+class SpotifyPlayAdmin(admin.ModelAdmin):
+    list_display = [
+        "user",
+        "played_at",
+        "name",
+        "artist_name",
+        "track_id",
+        "artist_id",
+        "popularity",
+    ]
+
+
+admin.site.register(SpotifyPlay, SpotifyPlayAdmin)

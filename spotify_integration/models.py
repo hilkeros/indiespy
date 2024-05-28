@@ -54,22 +54,38 @@ class SpotifyTracksRequest(models.Model):
 
     def create_spotify_plays(self):
         request_dict = ast.literal_eval(self.tracks_data)
-        for track in request_dict:
-            timestamp_str = track["played_at"]
+        new_created_plays = 0
+        skipped_items = 0
+
+        for item in request_dict:
+            timestamp_str = item["played_at"]
             timestamp = datetime.fromisoformat(timestamp_str[:-1])
-            SpotifyPlay.objects.create(
-                user=self.user,
-                played_at=timestamp,
-                track_id=track["track"]["id"],
-                name=track["track"]["name"],
-                artist_id=track["track"]["artists"][0]["id"],
-                artist_name=track["track"]["artists"][0]["name"],
-                popularity=track["track"]["popularity"],
+            track_id = item["track"]["id"]
+            matching_plays = SpotifyPlay.objects.filter(
+                track_id=track_id, played_at=timestamp, user=self.user
             )
+
+            if matching_plays.exists():
+                skipped_items += 1
+            else:
+                new_created_plays += 1
+                SpotifyPlay.objects.create(
+                    user=self.user,
+                    played_at=timestamp,
+                    track_id=track_id,
+                    name=item["track"]["name"],
+                    artist_id=item["track"]["artists"][0]["id"],
+                    artist_name=item["track"]["artists"][0]["name"],
+                    popularity=item["track"]["popularity"],
+                )
+
+        print(f"Skipped items: {skipped_items}, New plays: {new_created_plays}")
 
 
 class SpotifyPlay(models.Model):
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        CustomUser, on_delete=models.CASCADE, related_name="spotify_plays"
+    )
     played_at = models.DateTimeField()
     track_id = models.CharField(max_length=255)
     name = models.CharField(max_length=255)

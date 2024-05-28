@@ -17,6 +17,7 @@ class CustomUserAdmin(BaseUserAdmin):
     model = CustomUser
     list_display = (
         "email",
+        "get_spotify_play_count",
         "is_staff",
         "is_active",
     )
