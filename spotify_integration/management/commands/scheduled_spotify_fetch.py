@@ -1,4 +1,4 @@
-from django.core.management.base import BaseCommand
+from django.core.management.base import BaseCommand, CommandError
 
 from spotify_integration.models import SpotifyUser
 
@@ -8,12 +8,15 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         for user in SpotifyUser.objects.all():
-            user.get_refresh_token()
-            result = user.get_recently_played()
-            self.stdout.write(
-                self.style.SUCCESS(
-                    'Successfully retrieved tracks for "%s"' % result.user
-                )
-            )
-            if result:
-                result.create_spotify_plays()
+            try:
+                user.get_refresh_token()
+                result = user.get_recently_played()
+                if result:
+                    result.create_spotify_plays()
+                    self.stdout.write(
+                        self.style.SUCCESS(
+                            'Successfully retrieved tracks for "%s"' % result.user
+                        )
+                    )
+            except result.user.DoesNotExist:
+                raise CommandError('Couldnt fetch data for Spotify User "%s"' % result)
