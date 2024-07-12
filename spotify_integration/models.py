@@ -22,12 +22,14 @@ class SpotifyUser(models.Model):
         if response.status_code == 200:
             tracks_data = response.json()["items"]
             if tracks_data:
-                SpotifyTracksRequest.objects.create(
+                result = SpotifyTracksRequest.objects.create(
                     user=self.user,
                     tracks_data=tracks_data,
                     access_token=self.access_token,
                 )
                 print("New tracks data saved")
+                return result
+        return response
 
     def get_refresh_token(self):
         refresh_token_url = "https://accounts.spotify.com/api/token"
