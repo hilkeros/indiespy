@@ -19,4 +19,4 @@ class Command(BaseCommand):
                         )
                     )
             except result.user.DoesNotExist:
-                raise CommandError('Couldnt fetch data for Spotify User "%s"' % result)
+                raise CommandError('Couldnt fetch data for Spotify User "%s"' % user)
