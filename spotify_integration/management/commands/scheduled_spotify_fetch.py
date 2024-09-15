@@ -1,4 +1,6 @@
-from django.core.management.base import BaseCommand, CommandError
+import time
+
+from django.core.management.base import BaseCommand
 
 from spotify_integration.models import SpotifyUser
 
@@ -20,6 +22,7 @@ class Command(BaseCommand):
                             'Successfully retrieved tracks for "%s"' % result.user
                         )
                     )
+                time.sleep(1)
             except Exception as e:
                 self.stderr.write(
                     self.style.ERROR('Error processing user "%s": %s' % (user, result))
