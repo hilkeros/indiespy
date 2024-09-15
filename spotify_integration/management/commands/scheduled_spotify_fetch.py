@@ -12,6 +12,7 @@ class Command(BaseCommand):
         for user in SpotifyUser.objects.all():
             try:
                 user.get_refresh_token()
+                time.sleep(1)
                 result = user.get_recently_played()
                 print("Result: ", result)
                 result.refresh_from_db()
@@ -22,7 +23,6 @@ class Command(BaseCommand):
                             'Successfully retrieved tracks for "%s"' % result.user
                         )
                     )
-                time.sleep(1)
             except Exception as e:
                 self.stderr.write(
                     self.style.ERROR('Error processing user "%s": %s' % (user, result))
