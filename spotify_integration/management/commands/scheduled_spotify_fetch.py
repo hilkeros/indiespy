@@ -11,6 +11,7 @@ class Command(BaseCommand):
             try:
                 user.get_refresh_token()
                 result = user.get_recently_played()
+                print("Result: ", result)
                 result.refresh_from_db()
                 if result.tracks_data:
                     result.create_spotify_plays()
@@ -21,5 +22,5 @@ class Command(BaseCommand):
                     )
             except Exception as e:
                 self.stderr.write(
-                    self.style.ERROR('Error processing user "%s":' % (user))
+                    self.style.ERROR('Error processing user "%s": %s' % (user, result))
                 )
