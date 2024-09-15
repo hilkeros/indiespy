@@ -11,12 +11,15 @@ class Command(BaseCommand):
             try:
                 user.get_refresh_token()
                 result = user.get_recently_played()
-                if result:
+                result.refresh_from_db()
+                if result.tracks_data:
                     result.create_spotify_plays()
                     self.stdout.write(
                         self.style.SUCCESS(
                             'Successfully retrieved tracks for "%s"' % result.user
                         )
                     )
-            except result.user.DoesNotExist:
-                raise CommandError('Couldnt fetch data for Spotify User "%s"' % user)
+            except Exception as e:
+                self.stderr.write(
+                    self.style.ERROR('Error processing user "%s":' % (user))
+                )
