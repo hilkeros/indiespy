@@ -20,6 +20,7 @@ class CustomUserAdmin(BaseUserAdmin):
         "get_spotify_play_count",
         "is_staff",
         "is_active",
+        "created_at",
     )
     list_filter = (
         "email",

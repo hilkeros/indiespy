@@ -7,6 +7,7 @@ class SpotifyTracksRequestAdmin(admin.ModelAdmin):
     list_display = [
         "user",
         "access_token",
+        "created_at",
     ]
 
 
@@ -22,6 +23,7 @@ class SpotifyPlayAdmin(admin.ModelAdmin):
         "track_id",
         "artist_id",
         "popularity",
+        "created_at",
     ]
 
 

@@ -9,9 +9,14 @@ from users.models import CustomUser
 
 
 class SpotifyUser(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     access_token = models.CharField(max_length=255, blank=True, null=True)
     refresh_token = models.CharField(max_length=255, blank=True, null=True)
+
+    def __str__(self):
+        return str(self.user)
 
     def get_recently_played(self):
         recently_played_url = (
@@ -50,6 +55,8 @@ class SpotifyUser(models.Model):
 
 
 class SpotifyTracksRequest(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     access_token = models.CharField(max_length=255)
     tracks_data = models.TextField()
@@ -85,6 +92,8 @@ class SpotifyTracksRequest(models.Model):
 
 
 class SpotifyPlay(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     user = models.ForeignKey(
         CustomUser, on_delete=models.CASCADE, related_name="spotify_plays"
     )
